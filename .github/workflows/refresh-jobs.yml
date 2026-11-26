@@ -1,0 +1,17 @@
+name: Refresh BayTech job feeds
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Request the current feed
+        run: curl --fail --silent --show-error --max-time 90 --output /dev/null https://baytech-nine.vercel.app/api/jobs
