@@ -84,8 +84,12 @@ function cleanText(value?: string) {
 
 function roleCategory(title: string): Job["category"] | null {
   const value = title.toLowerCase();
-  if (/forward[- ]deployed|\bfde\b/.test(value)) return "Forward deployed";
-  if (/software|\bswe\b|frontend|front.end|backend|back.end|full.stack|platform engineer|infrastructure engineer|systems engineer|product engineer|machine learning engineer|ml engineer|ai engineer|application engineer|site reliability/.test(value)) return "Software engineering";
+  if (/forward[- ]deployed|\bfde\b/.test(value)) {
+    if (/program|partnership|\bpartner\b|sales|account|\bmanager\b|\bdirector\b|\bhead\b/.test(value)) return null;
+    return "Forward deployed";
+  }
+  if (/technical program manager|engineering program manager|\bprogram lead\b|project manager|software engineering manager|\bmanager, software engineering\b|director.*software engineering|head of.*engineering/.test(value)) return null;
+  if (/software|\bswe\b|frontend|front.end|backend|back.end|full.stack|platform engineer|infrastructure engineer|product engineer|machine learning engineer|ml engineer|ai engineer|application engineer|site reliability|devops engineer|mobile engineer|ios engineer|android engineer|security engineer/.test(value)) return "Software engineering";
   return null;
 }
 

@@ -228,6 +228,8 @@ a { color: inherit; text-decoration: none; }
   .apply-link { font-size: 9px; }
   .map-panel { position: static; order: 2; display: none; }
   .map-panel.mobile-map-visible { display: block; }
+  .discovery:has(.mobile-map-visible) .job-list,
+  .discovery:has(.mobile-map-visible) .list-footer { display: none; }
   .map-frame { height: min(111vw, 440px); }
   .mobile-view-toggle { display: flex; padding: 3px; border: 1px solid #e4e5dc; border-radius: 5px; background: #f0efe9; }
   .mobile-view-toggle button { padding: 6px 10px; border: 0; border-radius: 3px; color: #8c958c; background: transparent; font-size: 9px; cursor: pointer; }
