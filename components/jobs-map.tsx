@@ -1,7 +1,7 @@
 "use client";
 
-import { useMemo } from "react";
-import { CircleMarker, MapContainer, Popup, TileLayer, ZoomControl } from "react-leaflet";
+import { useEffect, useMemo } from "react";
+import { CircleMarker, MapContainer, Popup, TileLayer, useMap, ZoomControl } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import type { Job } from "@/lib/jobs";
 
@@ -12,6 +12,31 @@ type Props = {
   onCitySelect: (city: string) => void;
   onJobSelect: (id: string) => void;
 };
+
+function MapResizer() {
+  const map = useMap();
+
+  useEffect(() => {
+    const container = map.getContainer();
+    let frame = 0;
+    const refresh = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => map.invalidateSize({ pan: false }));
+    };
+    const observer = new ResizeObserver(refresh);
+    observer.observe(container);
+    window.addEventListener("resize", refresh);
+    refresh();
+
+    return () => {
+      cancelAnimationFrame(frame);
+      observer.disconnect();
+      window.removeEventListener("resize", refresh);
+    };
+  }, [map]);
+
+  return null;
+}
 
 export default function JobsMap({ jobs, activeCity, selectedJob, onCitySelect, onJobSelect }: Props) {
   const groups = useMemo(() => {
@@ -30,6 +55,7 @@ export default function JobsMap({ jobs, activeCity, selectedJob, onCitySelect, o
       zoomControl={false}
       className="jobs-map"
     >
+      <MapResizer />
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
